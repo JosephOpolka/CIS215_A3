@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Financial Manager</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="server_A3.css">
+    </head>
+    <body>
+            <div class="top">
+                <h1>Financial Manager</h1>
+                <div class="section">
+                    <h2>Results</h2>
+                    <div id="successMessage" style="display: none;"></div>
+                </div>
+            </div>
+        <div class="bottom_half">
+            <div class="actions">
+                <div class="section">
+                    <h2>Adding Entry</h2>
+                    <label for="add_drop">Select Table - </label>
+                    <select id="add_drop">
+                        <option id="driver">Members</option>
+                        <option id="vehicle">Transactions</option>
+                    </select>
+
+                    <form id="add_entry_Members">
+                        <p>Add Member - </p>
+                        <label for="member_name">Account Name - </label>
+                        <input type="text" id="member_name" name="">
+                        <label for="member_dob">DOB - </label>
+                        <input type="text" id="member_dob" name="">
+                        <label for="member_email">Email Address - </label>
+                        <input type="text" id="member_email" name="">
+                        <label for="member_phone">Phone Number - </label>
+                        <input type="text" id="member_phone" name="">
+                        <label for="member_account_type">Account Type - </label>
+                        <select id="member_account_type" name="member_account_type">
+                            <option value="checking">Checking</option>
+                            <option value="savings">Savings</option>
+                        </select>
+                        <label for="member_initial_balance">Initial Balance - </label>
+                        <select id="member_initial_balance" name="member_initial_balance">
+                            <option value="0">$0</option>
+                            <option value="1000">$1000</option>
+                            <option value="5000">$5000</option>
+                            <option value="10000">$10000</option>
+                        </select>
+
+                        <button id="add_submit_Members">Submit</button>
+                    </form>
+                    <form id="add_entry_Transactions">
+                        <p>Make Transaction - </p>
+                        <label for="transaction_account_id">Account ID - </label>
+                        <input type="text" id="transaction_account_id" name="">
+                        <label for="transaction_transaction_type">Transaction Type - </label>
+                        <select id="transaction_transaction_type" name="transaction_transaction_type">
+                            <option value="deposit">Deposit</option>
+                            <option value="withdrawal">Withdrawal</option>
+                        </select>
+                        <label for="transaction_amount">Amount - </label>
+                        <input type="text" id="transaction_amount" name="">
+                        <label for="transaction_description">Transaction Description - </label>
+                        <input type="text" id="transaction_description" name="">
+
+                        <button id="add_submit_Transactions">Submit</button>
+                    </form>
+                </div>
+
+                <div class="section">
+                    <h2>Delete Entry</h2>
+                    <label for="delete_drop">Select Table - </label>
+                    <select id="delete_drop">
+                        <option id="delete_opt_member">Members</option>
+                        <option id="delete_opt_account">Accounts</option>
+                        <option id="delete_opt_transaction">Transactions</option>
+                    </select>
+
+                    <p>Deleting Entry - </p>
+                    <form id="delete_entry">
+                        <label for="delete_id">ID - </label>
+                        <input type="text" id="delete_id" name="">
+                        <button id="delete_submit">Submit</button>
+                    </form>
+                </div>
+
+
+
+                <div class="section">
+                    <h2>Query Database</h2>
+                    <p>Search Query</p>
+                    <form id="query">
+                        <label for="query_table">Tables -</label>
+                        <div class="input-group">
+                            <select id="query_drop">
+                                <option id="Members">Members</option>
+                                <option id="Accounts">Accounts</option>
+                                <option id="Transactions">Transactions</option>
+                            </select>
+                        </div>
+                        
+                            <label for="query_id">Row (ID) -</label>
+                        <div class="input-group">
+                            <input type="text" id="query_id" name="">
+                        </div>
+                        
+                            <label for="query_column">Column -</label>
+                        <div class="input-group">
+                            
+                            <select id="query_column_Members">
+                                <option id="d_opt_fname">name</option>
+                                <option id="d_opt_mname">dob</option>
+                                <option id="d_opt_lname">email</option>
+                                <option id="d_opt_dob">phone</option>
+                                <option id="d_opt_street">account_type</option>
+                                <option id="d_opt_zip">initial_balance</option>
+                                <option id="d_opt_license">date_joined</option>
+                            </select>
+                            <select id="query_column_Accounts">
+                                <option id="v_opt_smiles">member_id</option>
+                                <option id="v_opt_emiles">account_type</option>
+                                <option id="v_opt_sfuel">balance</option>
+                            </select>
+                            <select id="query_column_Transactions">
+                                <option id="p_opt_fname">account_id</option>
+                                <option id="p_opt_mname">transaction_type</option>
+                                <option id="p_opt_lname">amount</option>
+                                <option id="p_opt_dob">transaction_date</option>
+                                <option id="p_opt_street">description</option>
+                            </select>
+                        </div>
+
+                            <label for="query_contain">Containing Text -</label>
+                        <div class="input-group">
+                            <input type="text" id="query_contain" name="">
+                        </div>
+                        <button id="query_submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+
+            
+            <div class="section">
+                <h2>Tables</h2>
+                <label for="table_drop">Select Table - </label>
+                <select id="table_drop">
+                    <option id="members">Members</option>
+                    <option id="accounts">Accounts</option>
+                    <option id="transactions">Transactions</option>
+                </select>
+                <div class="table_display"></div>
+            </div>
+        </div>
+        <script src="server_A3.js"></script>
+    </body>
+</html>
