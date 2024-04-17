@@ -96,14 +96,12 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('member_initial_balance').disabled = false;
         }
     
-        console.log(DriverForm);
-    
-        for (const key in DriverForm) {
-            if (!DriverForm[key]) {
-                alert('New entry contains empty field(s). All fields must contain a value.');
-                return;
-            }
+        // Validate member form
+        if (!validateMemberForm(DriverForm)) {
+            return;
         }
+    
+        console.log(DriverForm);
     
         fetch(`http://localhost:3000/api/add-${table.toLowerCase()}`, {
             method: 'POST',
@@ -177,7 +175,10 @@ document.addEventListener("DOMContentLoaded", function () {
             description: document.getElementById('transaction_description').value
         };
     
-        // Add validation for transactionForm fields
+        // Validate transaction form
+        if (!validateTransactionForm(transactionForm)) {
+            return;
+        }
     
         fetch(`http://localhost:3000/api/add-${table.toLowerCase()}`, {
             method: 'POST',
@@ -190,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(result => {
             // Once the transaction is successfully added, update the account balance
             UpdateAccountBalance(transactionForm.account_id, transactionForm.transaction_type, parseFloat(transactionForm.amount));
-            
+    
             resultsDisplay("Transaction has been made successfully.");
             fetchData(`http://localhost:3000/api/${table.toLowerCase()}`);
         })
@@ -238,6 +239,64 @@ document.addEventListener("DOMContentLoaded", function () {
         AddTransaction(event, 'Transactions');
     });
 
+
+    // Validation of New entry data for Members and Transactions
+    function validateMemberForm(DriverForm) {
+        const dobRegex = /^\d{4}-\d{2}-\d{2}$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^\d{10}$/;
+    
+        if (!dobRegex.test(DriverForm.dob)) {
+            alert('Invalid Date of Birth format. Please use YYYY-MM-DD format.');
+            return false;
+        }
+    
+        if (!emailRegex.test(DriverForm.email)) {
+            alert('Invalid Email format.');
+            return false;
+        }
+    
+        if (!phoneRegex.test(DriverForm.phone)) {
+            alert('Invalid Phone number format. Please enter 10 digits.');
+            return false;
+        }
+    
+        return true;
+    }
+    function validateTransactionForm(transactionForm) {
+        const { account_id, transaction_type, amount, description } = transactionForm;
+    
+        if (!account_id) {
+            alert('Account ID is required.');
+            return false;
+        }
+    
+        if (!transaction_type) {
+            alert('Transaction type is required.');
+            return false;
+        }
+    
+        // Check if amount is empty or not a valid number
+        if (!amount || isNaN(parseFloat(amount))) {
+            alert('Amount must be a valid number.');
+            return false;
+        }
+    
+        // Check if amount has more than two decimal places
+        const amountParts = amount.split('.');
+        if (amountParts.length > 2 || (amountParts[1] && amountParts[1].length > 2)) {
+            alert('Amount can have at most two decimal places.');
+            return false;
+        }
+    
+        // Check if description is empty
+        if (!description) {
+            alert('Description is required.');
+            return false;
+        }
+    
+        return true;
+    }
 
 
     // REMOVE ENTRY
