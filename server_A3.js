@@ -326,7 +326,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-
     
     fetchData('http://localhost:3000/api/members');
 
