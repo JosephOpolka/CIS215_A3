@@ -1,0 +1,64 @@
+-- Create Members table
+CREATE TABLE Members (
+    member_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    dob DATE NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    phone TEXT NOT NULL,
+    account_type TEXT NOT NULL,
+	-- Checking or Savings
+    initial_balance REAL,
+    date_joined DATE DEFAULT CURRENT_DATE
+);
+
+-- Create Accounts table
+CREATE TABLE Accounts (
+    account_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    member_id INTEGER NOT NULL,
+    account_type TEXT NOT NULL,
+	-- Checking or Savings
+    balance REAL NOT NULL DEFAULT 0,
+    FOREIGN KEY (member_id) REFERENCES Members(member_id)
+);
+
+-- Create Transactions table
+CREATE TABLE Transactions (
+    transaction_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_id INTEGER NOT NULL,
+    transaction_type TEXT NOT NULL,
+	-- Withdrawl or Deposit
+    amount REAL NOT NULL,
+    transaction_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    description TEXT,
+    FOREIGN KEY (account_id) REFERENCES Accounts(account_id)
+);
+
+-- Create trigger to check for overdrafts
+CREATE TRIGGER CheckOverdraft
+AFTER INSERT ON Transactions
+FOR EACH ROW
+BEGIN
+    UPDATE Accounts
+    SET balance = balance - NEW.amount
+    WHERE account_id = NEW.account_id;
+    
+    -- Check for overdraft
+    SELECT CASE
+        WHEN (SELECT balance FROM Accounts WHERE account_id = NEW.account_id) < 0 THEN
+            RAISE(ABORT, 'Transaction rejected: Account overdrawn')
+    END;
+END;
+
+
+<< UPDATED OVERDRAFT TRIGGER >>
+
+
+CREATE TRIGGER CheckOverdraft
+AFTER INSERT ON Transactions
+FOR EACH ROW
+WHEN (
+    SELECT balance FROM Accounts WHERE account_id = NEW.account_id
+) < 0
+BEGIN
+    SELECT RAISE(ABORT, 'Transaction rejected: Account overdrawn');
+END;
